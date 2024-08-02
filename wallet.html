@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BANANA Miniapp - Tasks</title>
+    <title>BANANA Miniapp - Кошелек и обмен</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +11,7 @@
             color: #fff;
             margin: 0;
             padding: 20px;
-            padding-bottom: 80px; /* Space for the fixed nav-bar */
+            padding-bottom: 80px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -28,70 +28,18 @@
             font-weight: bold;
             line-height: 1.2;
         }
-        .rules {
-            background-color: #fff;
-            color: #6B00F5;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .progress-card {
+        .container {
             background-color: #842DFF;
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
         }
-        .progress-text {
-            font-size: 18px;
-            margin-bottom: 20px;
+        h2 {
+            color: #FFCC00;
+            margin-top: 0;
         }
-        .progress-bar {
-            height: 30px;
-            background-color: #E5E5E5;
-            border-radius: 15px;
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 15px;
-            margin-bottom: 20px;
-        }
-        .progress-fill {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
+        .connect-btn, .exchange-btn {
             background-color: #FFCC00;
-            border-radius: 15px;
-            width: 66%; /* Измените это значение в зависимости от текущего прогресса */
-        }
-        .progress-marker {
-            width: 24px;
-            height: 24px;
-            background-color: #fff;
-            border: 3px solid #E5E5E5;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px;
-            color: #000;
-            font-weight: bold;
-            position: relative;
-            z-index: 2;
-        }
-        .progress-marker.active {
-            background-color: #FFCC00;
-            border-color: #FFCC00;
-        }
-        .claim-btn {
-            background-color: #888;
             color: #000;
             border: none;
             padding: 15px 20px;
@@ -99,59 +47,66 @@
             font-size: 18px;
             font-weight: bold;
             width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        .task-count {
-            font-size: 18px;
+        .connect-btn:hover, .exchange-btn:hover {
+            background-color: #FFD633;
+        }
+        .input-container {
+            position: relative;
             margin-bottom: 20px;
         }
-        .task-section {
-            margin-bottom: 20px;
-        }
-        .section-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .task-item {
-            background-color: #842DFF;
-            border-radius: 15px;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .task-icon {
-            width: 50px;
-            height: 50px;
+        .exchange-input {
+            width: 100%;
+            padding: 12px;
+            padding-right: 60px;
+            font-size: 16px;
             background-color: #6B00F5;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 15px;
-            font-size: 24px;
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            box-sizing: border-box;
         }
-        .task-details {
-            flex-grow: 1;
-        }
-        .task-title {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        .task-description {
-            color: #FFCC00;
-            font-size: 16px;
-        }
-        .task-reward {
-            color: #FFCC00;
+        .currency-label {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #FFCC00;
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 14px;
             font-weight: bold;
-            font-size: 16px;
-            margin-left: 10px;
+        }
+        .switch-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 8px;
+            font-size: 24px;
+            color: #FFCC00;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .switch-btn:hover {
+            color: #FFD633;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #6B00F5;
+        }
+        th {
+            background-color: #6B00F5;
+            color: #FFCC00;
         }
         .nav-bar {
             position: fixed;
@@ -179,200 +134,79 @@
             font-size: 24px;
             margin-bottom: 2px;
         }
-        .task-progress {
-            margin-top: 10px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            height: 6px;
-            overflow: hidden;
-        }
-        .task-progress-bar {
-            height: 100%;
-            background-color: #FFCC00;
-            transition: width 0.3s ease;
-        }
-        .task-progress-text {
-            font-size: 12px;
-            color: #FFCC00;
-            margin-top: 5px;
-            text-align: right;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 20px;
-            color: #000;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="title">Задания 🎃</div>
-        <div class="rules" id="rulesButton">?</div>
+        <div class="title">Кошелек и обмен 💰</div>
     </div>
-    <div class="progress-card">
-        <div class="progress-text">Выполняй 3 задания каждый день и получай бонус! 🎉</div>
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: 33%;"></div>
-            <div class="progress-marker active">1</div>
-            <div class="progress-marker inactive">2</div>
-            <div class="progress-marker inactive">3</div>
-        </div>
-        <button class="claim-btn">Забрать</button>
-    </div>
-    <div class="task-section">
-        <div class="section-title">Ежедневные задания</div>
-        <div class="task-list">
-            <div class="task-item">
-                <div class="task-icon">⭐</div>
-                <div class="task-details">
-                    <div class="task-title">Ежедневный вход</div>
-                    <div class="task-description">Отмечайся каждый день</div>
-                </div>
-                <div class="task-reward">50⭐</div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">🌟</div>
-                <div class="task-details">
-                    <div class="task-title">Игрок</div>
-                    <div class="task-description">Сыграй 5 игр с любой ставкой</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 60%;"></div>
-                    </div>
-                    <div class="task-progress-text">3/5</div>
-                </div>
-                <div class="task-reward">50⭐</div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">⚡</div>
-                <div class="task-details">
-                    <div class="task-title">Богач</div>
-                    <div class="task-description">Достигни суммы банков в 5 TON</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 40%;"></div>
-                    </div>
-                    <div class="task-progress-text">2/5 TON</div>
-                </div>
-                <div class="task-reward">50⭐</div>
+    
+    <div class="container">
+        <div class="wallet-section">
+            <button class="connect-btn" id="connectWallet">Подключить кошелек</button>
+            <div class="wallet-info" id="walletInfo" style="display:none;">
+                <h2>Информация о кошельке</h2>
+                <p>Адрес: <span id="walletAddress">0x1234...5678</span></p>
+                <p>Баланс TON: <span id="tonBalance">100</span> TON</p>
+                <p>Баланс игровой валюты: <span id="gameBalance">1000</span> GC</p>
             </div>
         </div>
     </div>
-    <div class="task-section">
-        <div class="section-title">Еженедельные задания</div>
-        <div class="task-list">
-            <div class="task-item">
-                <div class="task-icon">🔥</div>
-                <div class="task-details">
-                    <div class="task-title">Верный друг</div>
-                    <div class="task-description">Пригласи 5 друзей</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 20%;"></div>
-                    </div>
-                    <div class="task-progress-text">1/5</div>
+    
+    <div class="container">
+        <div class="exchange-section">
+            <h2>Обмен валюты</h2>
+            <div class="exchange-form">
+                <div class="input-container">
+                    <input type="number" class="exchange-input" id="fromAmount" placeholder="Сумма">
+                    <span class="currency-label" id="fromCurrencyLabel">TON</span>
                 </div>
-                <div class="task-reward">100⭐</div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">💥</div>
-                <div class="task-details">
-                    <div class="task-title">Банкир</div>
-                    <div class="task-description">Достигни суммы банков в 50 TON</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 30%;"></div>
-                    </div>
-                    <div class="task-progress-text">15/50 TON</div>
+                <button class="switch-btn" id="switchBtn">⇅</button>
+                <div class="input-container">
+                    <input type="number" class="exchange-input" id="toAmount" placeholder="Получите" readonly>
+                    <span class="currency-label" id="toCurrencyLabel">GC</span>
                 </div>
-                <div class="task-reward">130⭐</div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">✨</div>
-                <div class="task-details">
-                    <div class="task-title">Ежедневник</div>
-                    <div class="task-description">Отмечайся всю неделю</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 71.4%;"></div>
-                    </div>
-                    <div class="task-progress-text">5/7 дней</div>
-                </div>
-                <div class="task-reward">150⭐</div>
+                <button class="exchange-btn" id="exchangeBtn">Обменять</button>
             </div>
         </div>
     </div>
-    <div class="task-section">
-        <div class="section-title">Ежемесячные задания</div>
-        <div class="task-list">
-            <div class="task-item">
-                <div class="task-icon">🎁</div>
-                <div class="task-details">
-                    <div class="task-title">Начало месяца</div>
-                    <div class="task-description">Выполни 10 заданий в начале месяца</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 50%;"></div>
-                    </div>
-                    <div class="task-progress-text">5/10</div>
-                </div>
-                <div class="task-reward">200⭐</div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">🏆</div>
-                <div class="task-details">
-                    <div class="task-title">Месяц лидера</div>
-                    <div class="task-description">Занять место в топ-10 в конце месяца</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 30%;"></div>
-                    </div>
-                    <div class="task-progress-text">3/10</div>
-                </div>
-                <div class="task-reward">250⭐</div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">🚀</div>
-                <div class="task-details">
-                    <div class="task-title">Глобальные цели</div>
-                    <div class="task-description">Достигни общей цели месяца</div>
-                    <div class="task-progress">
-                        <div class="task-progress-bar" style="width: 20%;"></div>
-                    </div>
-                    <div class="task-progress-text">10/50</div>
-                </div>
-                <div class="task-reward">300⭐</div>
-            </div>
+    
+    <div class="container">
+        <div class="history-section">
+            <h2>История транзакций</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Тип</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionHistory">
+                    <tr>
+                        <td>2024-07-15</td>
+                        <td>Пополнение</td>
+                        <td>50 TON</td>
+                        <td>Завершено</td>
+                    </tr>
+                    <tr>
+                        <td>2024-07-14</td>
+                        <td>Вывод</td>
+                        <td>100 GC</td>
+                        <td>В обработке</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+
     <div class="nav-bar">
         <a href="index.html" class="nav-item">
             <div class="nav-icon">🍌</div>
             <div>Главная</div>
         </a>
-        <a href="quests.html" class="nav-item active">
+        <a href="quests.html" class="nav-item">
             <div class="nav-icon">🎃</div>
             <div>Задания</div>
         </a>
@@ -386,39 +220,29 @@
         </a>
     </div>
 
-    <!-- Модальное окно с правилами -->
-    <div id="rulesModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Правила заданий</h2>
-            <p>Выполняя задания, вы повышаете свое место в топе, что дает вам дополнительные награды!</p>
-            <p>Завершение 3 заданий в день приносит дополнительную награду, а также повышает ваш рейтинг!</p>
-            <p>Участвуйте активно, чтобы получать больше бонусов и стать лидером месяца!</p>
-        </div>
-    </div>
-
     <script>
-        // Получаем элементы модального окна
-        var modal = document.getElementById("rulesModal");
-        var btn = document.getElementById("rulesButton");
-        var span = document.getElementsByClassName("close")[0];
+        document.getElementById('connectWallet').addEventListener('click', function() {
+            document.getElementById('walletInfo').style.display = 'block';
+            this.style.display = 'none';
+        });
 
-        // Открываем модальное окно при клике на кнопку с вопросом
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
+        document.getElementById('exchangeBtn').addEventListener('click', function() {
+            alert('Обмен выполнен');
+        });
 
-        // Закрываем модальное окно при клике на [x]
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // Закрываем модальное окно при клике вне его области
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+        document.getElementById('switchBtn').addEventListener('click', function() {
+            const fromCurrencyLabel = document.getElementById('fromCurrencyLabel');
+            const toCurrencyLabel = document.getElementById('toCurrencyLabel');
+            
+            let temp = fromCurrencyLabel.textContent;
+            fromCurrencyLabel.textContent = toCurrencyLabel.textContent;
+            toCurrencyLabel.textContent = temp;
+            
+            const fromAmount = document.getElementById('fromAmount').value;
+            const toAmount = document.getElementById('toAmount').value;
+            document.getElementById('fromAmount').value = toAmount;
+            document.getElementById('toAmount').value = fromAmount;
+        });
     </script>
 </body>
 </html>
