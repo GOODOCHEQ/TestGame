@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Page - BANANA Miniapp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6B00F5;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .circle-btn {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #FFCC00;
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .circle-btn.info {
+            top: 20px;
+            left: 20px;
+        }
+        .circle-btn.wallet {
+            top: 20px;
+            right: 20px;
+        }
+        .title-center {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px;
+            font-weight: bold;
+            color: #FFFFFF;
+            z-index: 1000;
+        }
+        .profile-container {
+            position: absolute;
+            top: 110px;
+            width: 80%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            box-sizing: border-box;
+        }
+        .profile-photo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 140px;
+            margin-right: 20px;
+        }
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .username {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-align: center;
+            width: 100%;
+            word-wrap: break-word;
+            margin-top: 0; /* Убираем отрицательный отступ */
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            flex-grow: 1;
+            padding-top: 10px;
+            position: relative;
+        }
+        .level-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFFFFF;
+            text-align: center;
+        }
+        .level-bar {
+            width: 100%;
+            height: 25px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+            position: relative;
+        }
+        .level-fill {
+            height: 100%;
+            background-color: #FFCC00;
+            border-radius: 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 93.6%; /* Уровень заполнения */
+        }
+        .level-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #000;
+            z-index: 10;
+            font-size: 14px;
+        }
+        .balances {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 10px;
+            gap: 40px;
+        }
+        .balance {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(132, 45, 255, 0.7);
+            border-radius: 20px;
+            padding: 10px 0;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .nav-item.active {
+            color: #FFCC00;
+        }
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+        .main-menu {
+            position: absolute;
+            top: 430px; /* Установите отступ сверху */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Расстояние между кнопками */
+            width: 80%;
+            max-width: 600px;
+        }
+        .main-menu-btn {
+            background-color: #FFCC00;
+            color: #000;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%; /* Сделать кнопки одинаковой ширины */
+            text-align: center;
+        }
+        .main-menu-btn:hover {
+            background-color: #FFD633;
+        }
+    </style>
+</head>
+<body>
+    <!-- Circle Buttons -->
+    <button class="circle-btn info">i</button>
+    <button class="circle-btn wallet">💰</button>
+
+    <!-- Title Centered Between Buttons -->
+    <div class="title-center">Ton Games</div>
+
+    <!-- Profile Elements -->
+    <div class="profile-container">
+        <div class="profile-photo-container">
+            <div class="profile-photo">👤</div>
+            <div class="username">MerV1ng</div>
+        </div>
+        <div class="profile-info">
+            <div class="level-number">Уровень: 4</div>
+            <div class="level-bar">
+                <div class="level-fill"></div>
+                <div class="level-text">2340/2500</div>
+            </div>
+            <div class="balances">
+                <div class="balance">5 TON</div>
+                <div class="balance">3100 TNG</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Menu Buttons -->
+    <div class="main-menu">
+      <a href="" class="main-menu-btn">Играть</a>
+      <a href="profile.html" class="main-menu-btn">Профиль</a>
+      <a href="wallet.html" class="main-menu-btn">Кошелек</a>
+  </div>
+
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🍌</div>
+            <div>Главная</div>
+        </a>
+        <a href="quests.html" class="nav-item">
+            <div class="nav-icon">🎃</div>
+            <div>Задания</div>
+        </a>
+        <a href="leaderbord.html" class="nav-item">
+            <div class="nav-icon">🐵</div>
+            <div>Топ</div>
+        </a>
+        <a href="frens.html" class="nav-item">
+            <div class="nav-icon">👥</div>
+            <div>Друзья</div>
+        </a>
+    </div>
+</body>
+</html>

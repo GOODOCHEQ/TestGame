@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6B00F5;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+        .header {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user-box {
+            background-color: #842DFF;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .username {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .user-score {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .user-rank {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .upgrade-button {
+            background-color: #842DFF;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .leaders-count {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .leaderboard-container {
+            overflow-y: auto;
+            max-height: calc(100vh - 300px);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .leaderboard-container::-webkit-scrollbar {
+            display: none;
+        }
+        .leaderboard-item {
+            background-color: #842DFF;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(132, 45, 255, 0.7);
+            border-radius: 20px;
+            padding: 10px 0;
+            backdrop-filter: blur(10px);
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: #FFCC00;
+        }
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Топ игроков</div>
+    <div class="user-box">
+        <div class="user-info">
+            <img src="https://source.unsplash.com/random/100x100?sig=1" alt="User Avatar" class="user-avatar">
+            <div class="user-details">
+                <div class="username">You</div>
+                <div class="user-score">25,282 очков</div>
+            </div>
+        </div>
+        <div class="user-rank">#4,234</div>
+    </div>
+    <button class="upgrade-button">Подняться выше</button>
+    <div class="leaders-count">7,265 пользователей</div>
+    <div class="leaderboard-container">
+        <!-- Здесь будет генерироваться список из 100 пользователей -->
+    </div>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🍌</div>
+            <div>Главная</div>
+        </a>
+        <a href="quests.html" class="nav-item">
+            <div class="nav-icon">🎃</div>
+            <div>Задания</div>
+        </a>
+        <a href="leaderbord.html" class="nav-item active">
+            <div class="nav-icon">🐵</div>
+            <div>Топ</div>
+        </a>
+        <a href="frens.html" class="nav-item">
+            <div class="nav-icon">👥</div>
+            <div>Друзья</div>
+        </a>
+    </div>
+
+    <script>
+        const leaderboardContainer = document.querySelector('.leaderboard-container');
+        const names = ['Alice', 'Bob', 'Charlie', 'David', 'Emma', 'Frank', 'Grace', 'Henry', 'Ivy', 'Jack'];
+        const verifiedChance = 0.3;
+
+        for (let i = 1; i <= 100; i++) {
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomScore = (Math.random() * 100).toFixed(1);
+            const isVerified = Math.random() < verifiedChance;
+
+            const leaderboardItem = document.createElement('div');
+            leaderboardItem.className = 'leaderboard-item';
+            leaderboardItem.innerHTML = `
+                <div class="user-info">
+                    <img src="https://source.unsplash.com/random/100x100?sig=${i}" alt="${randomName} Avatar" class="user-avatar">
+                    <div class="user-details">
+                        <div class="username ${isVerified ? 'verified' : ''}">${randomName}</div>
+                        <div class="user-score">${randomScore}M </div>
+                    </div>
+                </div>
+                <div class="user-rank">#${i}</div>
+            `;
+            leaderboardContainer.appendChild(leaderboardItem);
+        }
+    </script>
+</body>
+</html>

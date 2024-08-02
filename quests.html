@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANANA Miniapp - Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6B00F5;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 80px; /* Space for the fixed nav-bar */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .rules {
+            background-color: #fff;
+            color: #6B00F5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .progress-card {
+            background-color: #842DFF;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .progress-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            height: 30px;
+            background-color: #E5E5E5;
+            border-radius: 15px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background-color: #FFCC00;
+            border-radius: 15px;
+            width: 66%; /* Измените это значение в зависимости от текущего прогресса */
+        }
+        .progress-marker {
+            width: 24px;
+            height: 24px;
+            background-color: #fff;
+            border: 3px solid #E5E5E5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #000;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+        .progress-marker.active {
+            background-color: #FFCC00;
+            border-color: #FFCC00;
+        }
+        .claim-btn {
+            background-color: #FFCC00;
+            color: #000;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+        }
+        .task-count {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .task-section {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .task-item {
+            background-color: #842DFF;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .task-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #6B00F5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        .task-details {
+            flex-grow: 1;
+        }
+        .task-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .task-description {
+            color: #FFCC00;
+            font-size: 16px;
+        }
+        .task-reward {
+            color: #FFCC00;
+            font-weight: bold;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(132, 45, 255, 0.7);
+            border-radius: 20px;
+            padding: 10px 0;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .nav-item.active {
+            color: #FFCC00;
+        }
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+        .task-progress {
+            margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 6px;
+            overflow: hidden;
+        }
+        .task-progress-bar {
+            height: 100%;
+            background-color: #FFCC00;
+            transition: width 0.3s ease;
+        }
+        .task-progress-text {
+            font-size: 12px;
+            color: #FFCC00;
+            margin-top: 5px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Задания 🎃</div>
+        <div class="rules">?</div>
+    </div>
+    <div class="progress-card">
+        <div class="progress-text">Выполняй 3 задания каждый день и получай бонус! 🎉</div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 66%;"></div>
+            <div class="progress-marker active">1</div>
+            <div class="progress-marker active">2</div>
+            <div class="progress-marker inactive">3</div>
+        </div>
+        <button class="claim-btn">Забрать</button>
+    </div>
+    <div class="task-section">
+        <div class="section-title">Ежедневные задания</div>
+        <div class="task-list">
+            <div class="task-item">
+                <div class="task-icon">⭐</div>
+                <div class="task-details">
+                    <div class="task-title">Ежедневный вход</div>
+                    <div class="task-description">Отмечайся каждый день</div>
+                </div>
+                <div class="task-reward">50⭐</div>
+            </div>
+            <div class="task-item">
+                <div class="task-icon">🌟</div>
+                <div class="task-details">
+                    <div class="task-title">Игрок</div>
+                    <div class="task-description">Сыграй 5 игр с любой ставкой</div>
+                    <div class="task-progress">
+                        <div class="task-progress-bar" style="width: 60%;"></div>
+                    </div>
+                    <div class="task-progress-text">3/5</div>
+                </div>
+                <div class="task-reward">50⭐</div>
+            </div>
+            <div class="task-item">
+                <div class="task-icon">⚡</div>
+                <div class="task-details">
+                    <div class="task-title">Богач</div>
+                    <div class="task-description">Достигни суммы банков в 5 TON</div>
+                    <div class="task-progress">
+                        <div class="task-progress-bar" style="width: 40%;"></div>
+                    </div>
+                    <div class="task-progress-text">2/5 TON</div>
+                </div>
+                <div class="task-reward">50⭐</div>
+            </div>
+        </div>
+    </div>
+    <div class="task-section">
+        <div class="section-title">Еженедельные задания</div>
+        <div class="task-list">
+            <div class="task-item">
+                <div class="task-icon">🔥</div>
+                <div class="task-details">
+                    <div class="task-title">Верный друг</div>
+                    <div class="task-description">Пригласи 5 друзей</div>
+                    <div class="task-progress">
+                        <div class="task-progress-bar" style="width: 20%;"></div>
+                    </div>
+                    <div class="task-progress-text">1/5</div>
+                </div>
+                <div class="task-reward">100⭐</div>
+            </div>
+            <div class="task-item">
+                <div class="task-icon">💥</div>
+                <div class="task-details">
+                    <div class="task-title">Банкир</div>
+                    <div class="task-description">Достигни суммы банков в 50 TON</div>
+                    <div class="task-progress">
+                        <div class="task-progress-bar" style="width: 30%;"></div>
+                    </div>
+                    <div class="task-progress-text">15/50 TON</div>
+                </div>
+                <div class="task-reward">130⭐</div>
+            </div>
+            <div class="task-item">
+                <div class="task-icon">✨</div>
+                <div class="task-details">
+                    <div class="task-title">Ежедневник</div>
+                    <div class="task-description">Отмечайся всю неделю</div>
+                    <div class="task-progress">
+                        <div class="task-progress-bar" style="width: 71.4%;"></div>
+                    </div>
+                    <div class="task-progress-text">5/7 дней</div>
+                </div>
+                <div class="task-reward">150⭐</div>
+            </div>
+        </div>
+    </div>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🍌</div>
+            <div>Главная</div>
+        </a>
+        <a href="quests.html" class="nav-item active">
+            <div class="nav-icon">🎃</div>
+            <div>Задания</div>
+        </a>
+        <a href="leaderbord.html" class="nav-item">
+            <div class="nav-icon">🐵</div>
+            <div>Топ</div>
+        </a>
+        <a href="frens.html" class="nav-item">
+            <div class="nav-icon">👥</div>
+            <div>Друзья</div>
+        </a>
+    </div>
+</body>
+</html>

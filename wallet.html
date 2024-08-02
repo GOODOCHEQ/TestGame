@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANANA Miniapp - Кошелек и обмен</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6B00F5;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 80px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .container {
+            background-color: #842DFF;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #FFCC00;
+            margin-top: 0;
+        }
+        .connect-btn, .exchange-btn {
+            background-color: #FFCC00;
+            color: #000;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .connect-btn:hover, .exchange-btn:hover {
+            background-color: #FFD633;
+        }
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .exchange-input {
+            width: 100%;
+            padding: 12px;
+            padding-right: 60px;
+            font-size: 16px;
+            background-color: #6B00F5;
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        .currency-label {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #FFCC00;
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .switch-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 8px;
+            font-size: 24px;
+            color: #FFCC00;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .switch-btn:hover {
+            color: #FFD633;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #6B00F5;
+        }
+        th {
+            background-color: #6B00F5;
+            color: #FFCC00;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(132, 45, 255, 0.7);
+            border-radius: 20px;
+            padding: 10px 0;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .nav-item.active {
+            color: #FFCC00;
+        }
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Кошелек и обмен 💰</div>
+    </div>
+    
+    <div class="container">
+        <div class="wallet-section">
+            <button class="connect-btn" id="connectWallet">Подключить кошелек</button>
+            <div class="wallet-info" id="walletInfo" style="display:none;">
+                <h2>Информация о кошельке</h2>
+                <p>Адрес: <span id="walletAddress">0x1234...5678</span></p>
+                <p>Баланс TON: <span id="tonBalance">100</span> TON</p>
+                <p>Баланс игровой валюты: <span id="gameBalance">1000</span> GC</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="exchange-section">
+            <h2>Обмен валюты</h2>
+            <div class="exchange-form">
+                <div class="input-container">
+                    <input type="number" class="exchange-input" id="fromAmount" placeholder="Сумма">
+                    <span class="currency-label" id="fromCurrencyLabel">TON</span>
+                </div>
+                <button class="switch-btn" id="switchBtn">⇅</button>
+                <div class="input-container">
+                    <input type="number" class="exchange-input" id="toAmount" placeholder="Получите" readonly>
+                    <span class="currency-label" id="toCurrencyLabel">GC</span>
+                </div>
+                <button class="exchange-btn" id="exchangeBtn">Обменять</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="history-section">
+            <h2>История транзакций</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Тип</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionHistory">
+                    <tr>
+                        <td>2024-07-15</td>
+                        <td>Пополнение</td>
+                        <td>50 TON</td>
+                        <td>Завершено</td>
+                    </tr>
+                    <tr>
+                        <td>2024-07-14</td>
+                        <td>Вывод</td>
+                        <td>100 GC</td>
+                        <td>В обработке</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🍌</div>
+            <div>Главная</div>
+        </a>
+        <a href="quests.html" class="nav-item">
+            <div class="nav-icon">🎃</div>
+            <div>Задания</div>
+        </a>
+        <a href="leaderbord.html" class="nav-item">
+            <div class="nav-icon">🐵</div>
+            <div>Топ</div>
+        </a>
+        <a href="frens.html" class="nav-item">
+            <div class="nav-icon">👥</div>
+            <div>Друзья</div>
+        </a>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+
+        document.getElementById('connectWallet').addEventListener('click', function() {
+            // Проверяем, поддерживается ли API кошелька
+            if (tg.isVersionAtLeast('6.1') && tg.platform !== 'unknown') {
+                tg.showPopup({
+                    title: 'Подключение кошелька',
+                    message: 'Вы хотите подключить свой кошелек TON?',
+                    buttons: [
+                        {id: "connect", type: "ok", text: "Подключить"},
+                        {id: "cancel", type: "cancel", text: "Отмена"}
+                    ]
+                }, function(buttonId) {
+                    if (buttonId === "connect") {
+                        // Здесь будет логика подключения кошелька
+                        tg.sendData("connect_wallet");
+                        document.getElementById('walletInfo').style.display = 'block';
+                        document.getElementById('connectWallet').style.display = 'none';
+                    }
+                });
+            } else {
+                alert("Ваша версия Telegram не поддерживает подключение кошелька");
+            }
+        });
+
+        document.getElementById('exchangeBtn').addEventListener('click', function() {
+            alert('Обмен выполнен');
+        });
+
+        document.getElementById('switchBtn').addEventListener('click', function() {
+            const fromCurrencyLabel = document.getElementById('fromCurrencyLabel');
+            const toCurrencyLabel = document.getElementById('toCurrencyLabel');
+            
+            let temp = fromCurrencyLabel.textContent;
+            fromCurrencyLabel.textContent = toCurrencyLabel.textContent;
+            toCurrencyLabel.textContent = temp;
+            
+            const fromAmount = document.getElementById('fromAmount').value;
+            const toAmount = document.getElementById('toAmount').value;
+            document.getElementById('fromAmount').value = toAmount;
+            document.getElementById('toAmount').value = fromAmount;
+        });
+
+        // Инициализация Telegram Web App
+        tg.expand();
+    </script>
+</body>
+</html>

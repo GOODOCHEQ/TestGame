@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite Troops to Get Banana</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #6B00F5;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .rules {
+            background-color: #fff;
+            color: #6B00F5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .invite-box {
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+        .invite-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .invite-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .invite-count {
+            font-size: 56px;
+            font-weight: bold;
+            color: #000;
+            line-height: 1;
+        }
+        .invited-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .progress-container {
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+        .progress-bar {
+            height: 30px;
+            background-color: #E5E5E5;
+            border-radius: 15px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+        }
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background-color: #FFCC00;
+            border-radius: 15px;
+            width: 66%;
+        }
+        .progress-marker {
+            width: 24px;
+            height: 24px;
+            background-color: #fff;
+            border: 3px solid #E5E5E5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #000;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+        .progress-marker.active {
+            background-color: #FFCC00;
+            border-color: #FFCC00;
+        }
+        .claim-button {
+            background-color: #FFCC00;
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .claim-button:hover {
+            background-color: #FFD633;
+        }
+        .troop-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .troop-item {
+            background-color: #842DFF;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .troop-info {
+            display: flex;
+            align-items: center;
+        }
+        .troop-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #6B00F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 24px;
+            background-image: url('avatar-placeholder.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .troop-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .troop-name {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .troop-status {
+            color: #FFCC00;
+            font-size: 16px;
+        }
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(132, 45, 255, 0.7);
+            border-radius: 20px;
+            padding: 10px 0;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 14px;
+            text-decoration: none;
+            color: #fff;
+        }
+        .nav-item.active {
+            color: #FFCC00;
+        }
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 20px;
+            color: #000;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Стили для кнопок Invite Troops и Copy */
+        .invite-troops-container {
+            position: fixed;
+            bottom: 100px; /* 20 пикселей выше блока навигации */
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 999;
+        }
+
+        .invite-troops-button, .copy-button {
+            background-color: #FFCC00;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 20px;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .invite-troops-button:hover, .copy-button:hover {
+            background-color: #FFD633;
+        }
+
+        .invite-troops-button {
+            margin-right: 10px; /* Отступ между кнопками */
+        }
+
+        .invite-troops-icon, .copy-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Приглашай друзей<br>получай бонусы!</div>
+        <div class="rules" id="rulesButton">?</div>
+    </div>
+    <div class="invite-box">
+        <div class="invite-content">
+            <div class="invite-info">
+                <div class="invite-count">5</div>
+                <div class="invited-label">Всего приглашено</div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                    <div class="progress-marker active">4</div>
+                    <div class="progress-marker active">5</div>
+                    <div class="progress-marker">6</div>
+                </div>
+            </div>
+        </div>
+        <button class="claim-button">Забрать</button>
+    </div>
+    <div class="troop-list">
+        <div class="troop-item">
+            <div class="troop-info">
+                <div class="troop-avatar" style="background-image: url('avatar1.jpg');"></div>
+                <div class="troop-details">
+                    <div class="troop-name">Gendo</div>
+                    <div class="troop-status">Зарегистрирован 01.07.2024 09:00</div>
+                </div>
+            </div>
+        </div>
+        <div class="troop-item">
+            <div class="troop-info">
+                <div class="troop-avatar" style="background-image: url('avatar2.jpg');"></div>
+                <div class="troop-details">
+                    <div class="troop-name">Anaconda</div>
+                    <div class="troop-status">Зарегистрирован 05.07.2024 14:20</div>
+                </div>
+            </div>
+        </div>
+        <div class="troop-item">
+            <div class="troop-info">
+                <div class="troop-avatar" style="background-image: url('avatar3.jpg');"></div>
+                <div class="troop-details">
+                    <div class="troop-name">Carrot</div>
+                    <div class="troop-status">Зарегистрирован 10.07.2024 11:45</div>
+                </div>
+            </div>
+        </div>
+        <div class="troop-item">
+            <div class="troop-info">
+                <div class="troop-avatar" style="background-image: url('avatar4.jpg');"></div>
+                <div class="troop-details">
+                    <div class="troop-name">Hores</div>
+                    <div class="troop-status">Зарегистрирован 15.07.2024 16:30</div>
+                </div>
+            </div>
+        </div>
+        <div class="troop-item">
+            <div class="troop-info">
+                <div class="troop-avatar" style="background-image: url('avatar5.jpg');"></div>
+                <div class="troop-details">
+                    <div class="troop-name">Bobster</div>
+                    <div class="troop-status">Зарегистрирован 20.07.2024 08:15</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="invite-troops-container">
+        <button class="invite-troops-button">
+            <img src="troops-icon.png" alt="Invite Troops Icon" class="invite-troops-icon">
+            Пригласить 
+        </button>
+        <button class="copy-button">
+            <img src="copy-icon.png" alt="Copy Icon" class="copy-icon">
+            
+        </button>
+    </div>
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon">🍌</div>
+            <div>Главная</div>
+        </a>
+        <a href="quests.html" class="nav-item">
+            <div class="nav-icon">🎃</div>
+            <div>Задания</div>
+        </a>
+        <a href="leaderbord.html" class="nav-item">
+            <div class="nav-icon">🐵</div>
+            <div>Топ</div>
+        </a>
+        <a href="frens.html" class="nav-item active">
+            <div class="nav-icon">👥</div>
+            <div>Друзья</div>
+        </a>
+    </div>
+
+    <!-- Модальное окно с правилами -->
+    <div id="rulesModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Правила реферальной программы</h2>
+            <p>Добро пожаловать в нашу увлекательную реферальную программу! Вот как это работает:</p>
+            <ul>
+                <li>За каждого третьего приглашенного игрока вы получаете дополнительную награду! 🎁</li>
+                <li>Чем больше друзей вы приглашаете, тем больше бонусов получаете.</li>
+                <li>Вы можете пригласить до 24 человек и получить за них награды.</li>
+                <li>Награды становятся все более ценными с каждым новым этапом!</li>
+            </ul>
+            <p>Приглашайте друзей, собирайте команду и наслаждайтесь игрой вместе!</p>
+        </div>
+    </div>
+
+    <script>
+        // Получаем элементы модального окна
+        var modal = document.getElementById("rulesModal");
+        var btn = document.getElementById("rulesButton");
+        var span = document.getElementsByClassName("close")[0];
+
+        // Открываем модальное окно при клике на кнопку с вопросом
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // Закрываем модальное окно при клике на [x]
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Закрываем модальное окно при клике вне его области
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
