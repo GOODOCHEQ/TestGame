@@ -15,7 +15,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden; /* Отключаем прокрутку для всей страницы */
         }
         .header {
             display: flex;
@@ -90,7 +90,7 @@
             height: 100%;
             background-color: #FFCC00;
             border-radius: 15px;
-            width: 66%;
+            width: 100%;
         }
         .progress-marker {
             width: 24px;
@@ -128,10 +128,16 @@
             background-color: #FFD633;
         }
         .troop-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+    max-height: 300px; /* Ограничиваем высоту блока со списком */
+    overflow-y: scroll; /* Включаем прокрутку для блока со списком */
+    margin-bottom: 80px; /* Отступ снизу, чтобы кнопки не перекрывались */
+    scrollbar-width: none; /* Для Firefox: скрываем полосу прокрутки */
+    -ms-overflow-style: none;  /* Для Internet Explorer и Edge: скрываем полосу прокрутки */
+}
+
+.troop-list::-webkit-scrollbar {
+    display: none; /* Для Chrome, Safari и Opera: скрываем полосу прокрутки */
+}
         .troop-item {
             background-color: #842DFF;
             border-radius: 15px;
@@ -139,6 +145,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 10px;
         }
         .troop-info {
             display: flex;
@@ -282,7 +289,7 @@
     <div class="invite-box">
         <div class="invite-content">
             <div class="invite-info">
-                <div class="invite-count">5</div>
+                <div class="invite-count">6</div>
                 <div class="invited-label">Всего приглашено</div>
             </div>
             <div class="progress-container">
@@ -290,7 +297,7 @@
                     <div class="progress-fill"></div>
                     <div class="progress-marker active">4</div>
                     <div class="progress-marker active">5</div>
-                    <div class="progress-marker">6</div>
+                    <div class="progress-marker active">6</div>
                 </div>
             </div>
         </div>
@@ -326,6 +333,15 @@
         </div>
         <div class="troop-item">
             <div class="troop-info">
+                <div class="troop-avatar" style="background-image: url('avatar1.jpg');"></div>
+                <div class="troop-details">
+                    <div class="troop-name">Gendo</div>
+                    <div class="troop-status">Зарегистрирован 13.07.2024 19:00</div>
+                </div>
+            </div>
+        </div>
+        <div class="troop-item">
+            <div class="troop-info">
                 <div class="troop-avatar" style="background-image: url('avatar4.jpg');"></div>
                 <div class="troop-details">
                     <div class="troop-name">Hores</div>
@@ -350,7 +366,6 @@
         </button>
         <button class="copy-button">
             <img src="copy-icon.png" alt="Copy Icon" class="copy-icon">
-            
         </button>
     </div>
     <div class="nav-bar">
