@@ -58,24 +58,13 @@
             font-size: 18px;
             font-weight: bold;
         }
-        .upgrade-button {
-            background-color: #842DFF;
-            color: #fff;
-            border: none;
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-        }
         .leaders-count {
             font-size: 18px;
             margin-bottom: 10px;
         }
         .leaderboard-container {
             overflow-y: auto;
-            max-height: calc(100vh - 300px);
+            max-height: calc(100vh - 260px);
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -122,7 +111,7 @@
     <div class="header">Топ игроков</div>
     <div class="user-box">
         <div class="user-info">
-            <img src="https://source.unsplash.com/random/100x100?sig=1" alt="User Avatar" class="user-avatar">
+            <img src="https://via.placeholder.com/100" alt="User Avatar" class="user-avatar">
             <div class="user-details">
                 <div class="username">You</div>
                 <div class="user-score">25,282 очков</div>
@@ -130,7 +119,6 @@
         </div>
         <div class="user-rank">#4,234</div>
     </div>
-    <button class="upgrade-button">Подняться выше</button>
     <div class="leaders-count">7,265 пользователей</div>
     <div class="leaderboard-container">
         <!-- Здесь будет генерироваться список из 100 пользователей -->
@@ -168,10 +156,10 @@
             leaderboardItem.className = 'leaderboard-item';
             leaderboardItem.innerHTML = `
                 <div class="user-info">
-                    <img src="https://source.unsplash.com/random/100x100?sig=${i}" alt="${randomName} Avatar" class="user-avatar">
+                   <img src="https://via.placeholder.com/100" alt="${randomName} Avatar" class="user-avatar">
                     <div class="user-details">
                         <div class="username ${isVerified ? 'verified' : ''}">${randomName}</div>
-                        <div class="user-score">${randomScore}M </div>
+                        <div class="user-score">${randomScore}M</div>
                     </div>
                 </div>
                 <div class="user-rank">#${i}</div>
