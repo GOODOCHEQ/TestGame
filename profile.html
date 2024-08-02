@@ -31,20 +31,6 @@
             line-height: 1.2;
         }
 
-        .rules {
-            background-color: #fff;
-            color: #6B00F5;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
         .profile {
             background-color: #842DFF;
             border-radius: 20px;
@@ -52,6 +38,13 @@
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+        }
+
+        .profile .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
         }
 
         .avatar {
@@ -64,21 +57,30 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-right: 20px;
+        }
+
+        .nickname {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            margin-top: 10px;
         }
 
         .profile-details {
             flex-grow: 1;
+            margin-top: -35px; /* Поднимаем все содержимое блока на 5 пикселей */
         }
 
         .level {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 10px;
+            margin-top: 5px; /* Отменяем часть смещения для уровня */
         }
 
         .experience {
             position: relative;
+            margin-top: 5px; /* Отменяем часть смещения для шкалы опыта */
         }
 
         .exp-bar {
@@ -105,40 +107,97 @@
             font-size: 14px;
         }
 
-        .achievements, .statistics, .inventory {
+        .statistics {
             background-color: #842DFF;
             border-radius: 20px;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
 
-        h2 {
+        .statistics h2 {
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin: 0 0 15px 0; /* Убираем верхний отступ и оставляем только нижний */
             text-align: center;
-        }
-
-        .achievement-list, .inventory-list {
-            display: flex;
-            justify-content: space-around;
-            gap: 10px;
-        }
-
-        .achievement, .item {
-            width: 50px;
-            height: 50px;
-            background-color: #FFCC00;
-            border-radius: 10px;
+            color: #fff;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
             text-align: center;
-            font-size: 18px;
+        }
+
+        .stat-card {
+            background-color: #6B00F5;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #fff;
+        }
+
+        .stat-title {
+            font-size: 16px;
             font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .inventory {
+            background-color: #842DFF;
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .inventory h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 0 10px 0; /* Уменьшение верхнего отступа и увеличение нижнего отступа */
+            text-align: center;
+        }
+
+        .inventory-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 элемента в строке */
+            gap: 15px;
+            justify-items: center;
+        }
+
+        .item {
+            background-color: #FFCC00;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 150px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .item img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .item-title {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .item.active {
+            background-color: #FFCC00; /* Яркое выделение активного элемента */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+            border: 2px solid #FF0000; /* Красная обводка для активного элемента */
         }
 
         .nav-bar {
@@ -174,12 +233,14 @@
 </head>
 <body>
     <div class="header">
-        <div class="title">Профиль </div>
-        <div class="rules">?</div>
+        <div class="title">Профиль</div>
     </div>
 
     <section class="profile">
-        <div class="avatar">👤</div>
+        <div class="avatar-container">
+            <div class="avatar">👤</div>
+            <div class="nickname">MerV1ng</div>
+        </div>
         <div class="profile-details">
             <div class="level">Уровень: 5</div>
             <div class="experience">
@@ -191,36 +252,56 @@
         </div>
     </section>
 
-    <section class="achievements">
-        <h2>Достижения</h2>
-        <div class="achievement-list">
-            <div class="achievement"></div>
-            <div class="achievement"></div>
-            <div class="achievement"></div>
-            <div class="achievement"></div>
-            <div class="achievement"></div>
-        </div>
-    </section>
-
     <section class="statistics">
         <h2>Статистика</h2>
         <div class="stats-grid">
-            <p>Всего игр: 100</p>
-            <p>Победы: 50</p>
-            <p>Выигрыш: 60%</p>
-            <p>Время в игре: 12 часов</p>
-            <p>Общий доход: 2000₽</p>
-            <p>Побед подряд: 5</p>
+            <div class="stat-card">
+                <div class="stat-title">Всего игр</div>
+                <div class="stat-value">100</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Победы</div>
+                <div class="stat-value">50</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Процент побед</div>
+                <div class="stat-value">50%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Побед подряд</div>
+                <div class="stat-value">5</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Общий выигрыш</div>
+                <div class="stat-value">3400 GT</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Рефералы</div>
+                <div class="stat-value">500 GT</div>
+            </div>
         </div>
     </section>
 
     <section class="inventory">
         <h2>Инвентарь</h2>
         <div class="inventory-list">
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+            <!-- Пример NFT картинок с подписями -->
+            <div class="item" data-id="1">
+                <img src="https://via.placeholder.com/150?text=NFT+1" alt="NFT 1">
+                <div class="item-title">NFT 1</div>
+            </div>
+            <div class="item" data-id="2">
+                <img src="https://via.placeholder.com/150?text=NFT+2" alt="NFT 2">
+                <div class="item-title">NFT 2</div>
+            </div>
+            <div class="item" data-id="3">
+                <img src="https://via.placeholder.com/150?text=NFT+3" alt="NFT 3">
+                <div class="item-title">NFT 3</div>
+            </div>
+            <div class="item" data-id="4">
+                <img src="https://via.placeholder.com/150?text=NFT+4" alt="NFT 4">
+                <div class="item-title">NFT 4</div>
+            </div>
         </div>
     </section>
 
@@ -242,5 +323,14 @@
             <div>Друзья</div>
         </a>
     </div>
+
+    <script>
+        document.querySelectorAll('.item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
