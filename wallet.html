@@ -55,7 +55,7 @@
         }
         .input-container {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Уменьшено расстояние между полями ввода */
         }
         .exchange-input {
             width: 100%;
@@ -67,6 +67,9 @@
             border-radius: 15px;
             color: #fff;
             box-sizing: border-box;
+            -webkit-appearance: none; /* Убирает стрелочки в Chrome/Safari */
+            -moz-appearance: none; /* Убирает стрелочки в Firefox */
+            appearance: none; /* Убирает стрелочки в других браузерах */
         }
         .currency-label {
             position: absolute;
@@ -158,12 +161,12 @@
             <h2>Обмен валюты</h2>
             <div class="exchange-form">
                 <div class="input-container">
-                    <input type="number" class="exchange-input" id="fromAmount" placeholder="Сумма">
+                    <input type="number" class="exchange-input" id="fromAmount" placeholder="Сумма" value="0.0" oninput="calculateConversion()">
                     <span class="currency-label" id="fromCurrencyLabel">TON</span>
                 </div>
                 <button class="switch-btn" id="switchBtn">⇅</button>
                 <div class="input-container">
-                    <input type="number" class="exchange-input" id="toAmount" placeholder="Получите" readonly>
+                    <input type="number" class="exchange-input" id="toAmount" placeholder="Получите" value="0.0" readonly>
                     <span class="currency-label" id="toCurrencyLabel">GC</span>
                 </div>
                 <button class="exchange-btn" id="exchangeBtn">Обменять</button>
@@ -221,6 +224,44 @@
     </div>
 
     <script>
+        const exchangeRate = 1000; // Курс обмена 1 TON = 1000 GC
+
+        function calculateConversion() {
+            const fromCurrency = document.getElementById('fromCurrencyLabel').textContent;
+            const toCurrency = document.getElementById('toCurrencyLabel').textContent;
+            const fromAmount = parseFloat(document.getElementById('fromAmount').value) || 0;
+
+            let toAmount;
+
+            if (fromCurrency === 'TON' && toCurrency === 'GC') {
+                toAmount = fromAmount * exchangeRate;
+            } else if (fromCurrency === 'GC' && toCurrency === 'TON') {
+                toAmount = fromAmount / exchangeRate;
+            } else {
+                toAmount = 0;
+            }
+
+            document.getElementById('toAmount').value = toAmount.toFixed(2);
+        }
+
+        function swapCurrencies() {
+            const fromCurrencyLabel = document.getElementById('fromCurrencyLabel');
+            const toCurrencyLabel = document.getElementById('toCurrencyLabel');
+            const fromAmountField = document.getElementById('fromAmount');
+            const toAmountField = document.getElementById('toAmount');
+
+            let tempCurrency = fromCurrencyLabel.textContent;
+            fromCurrencyLabel.textContent = toCurrencyLabel.textContent;
+            toCurrencyLabel.textContent = tempCurrency;
+
+            // Пересчитать значения при смене валют
+            let tempAmount = fromAmountField.value;
+            fromAmountField.value = toAmountField.value;
+            toAmountField.value = tempAmount;
+
+            calculateConversion();
+        }
+
         document.getElementById('connectWallet').addEventListener('click', function() {
             document.getElementById('walletInfo').style.display = 'block';
             this.style.display = 'none';
@@ -230,19 +271,10 @@
             alert('Обмен выполнен');
         });
 
-        document.getElementById('switchBtn').addEventListener('click', function() {
-            const fromCurrencyLabel = document.getElementById('fromCurrencyLabel');
-            const toCurrencyLabel = document.getElementById('toCurrencyLabel');
-            
-            let temp = fromCurrencyLabel.textContent;
-            fromCurrencyLabel.textContent = toCurrencyLabel.textContent;
-            toCurrencyLabel.textContent = temp;
-            
-            const fromAmount = document.getElementById('fromAmount').value;
-            const toAmount = document.getElementById('toAmount').value;
-            document.getElementById('fromAmount').value = toAmount;
-            document.getElementById('toAmount').value = fromAmount;
-        });
+        document.getElementById('switchBtn').addEventListener('click', swapCurrencies);
+
+        // Обработка ввода в поле "Сумма"
+        document.getElementById('fromAmount').addEventListener('input', calculateConversion);
     </script>
 </body>
 </html>
